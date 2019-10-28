@@ -1,11 +1,11 @@
 import React from 'react';
 import PhotoCard from './PhotoCard';
 
-const Gallery = props => {
+const Gallery = ({ photos, onImageSelect }) => {
   return (
     <ul className="gallery">
-      {props.photos.map(item => (
-        <PhotoCard key={item.id} photo={item} />
+      {photos.map(item => (
+        <PhotoCard key={item.id} photo={item} onImageSelect={onImageSelect} />
       ))}
     </ul>
   );

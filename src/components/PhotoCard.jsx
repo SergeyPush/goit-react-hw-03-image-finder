@@ -1,10 +1,16 @@
 import React from 'react';
 
-const PhotoCard = ({ photo }) => {
+const PhotoCard = ({ photo, onImageSelect }) => {
+  const handleImageButton = image => {
+    // this.props;
+    onImageSelect(image);
+    // console.log(id);
+  };
+
   const {
     // id,
     webformatURL,
-    // largeImageURL,
+    largeImageURL,
     likes,
     views,
     comments,
@@ -34,7 +40,11 @@ const PhotoCard = ({ photo }) => {
           </p>
         </div>
 
-        <button type="button" className="fullscreen-button">
+        <button
+          type="button"
+          className="fullscreen-button"
+          onClick={() => handleImageButton(largeImageURL)}
+        >
           <i className="material-icons">zoom_out_map</i>
         </button>
       </div>

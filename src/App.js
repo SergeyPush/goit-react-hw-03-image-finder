@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 import Loader from 'react-loader-spinner';
 import SearchForm from './components/SearchForm';
 import Gallery from './components/Gallery';
+import Modal from './components/Modal';
 
 import getImages from './services/pixabay';
 
@@ -11,6 +12,7 @@ import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import './styles/styles.css';
 
 const rootLoader = document.querySelector('#root-loader');
+const rootModal = document.querySelector('#root-modal');
 
 class App extends Component {
   state = {
@@ -19,6 +21,7 @@ class App extends Component {
     page: 1,
     searchQuery: '',
     error: null,
+    selectedImage: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -39,6 +42,8 @@ class App extends Component {
   };
 
   onLoadMore = () => {
+    const height = document.body.offsetHeight;
+
     const { searchQuery, page } = this.state;
     this.setState({
       isLoading: true,
@@ -59,11 +64,27 @@ class App extends Component {
         this.setState({
           isLoading: false,
         });
+        window.scrollTo({
+          top: height,
+          behavior: 'smooth',
+        });
       });
   };
 
+  onImageSelect = id => {
+    this.setState({
+      selectedImage: id,
+    });
+  };
+
+  closeModal = () => {
+    this.setState({
+      selectedImage: null,
+    });
+  };
+
   render() {
-    const { photos, isLoading } = this.state;
+    const { photos, isLoading, selectedImage } = this.state;
     return (
       <div>
         <SearchForm onSubmit={this.onSubmit} />
@@ -78,8 +99,14 @@ class App extends Component {
           />,
           rootLoader,
         )}
+        {selectedImage &&
+          createPortal(
+            <Modal image={selectedImage} closeModal={this.closeModal} />,
+            rootModal,
+          )}
+        {/* {selectedImage && <Modal image={selectedImage} />} */}
 
-        <Gallery photos={photos} />
+        <Gallery photos={photos} onImageSelect={this.onImageSelect} />
         {photos.length > 0 && (
           <button type="button" onClick={this.onLoadMore} className="button">
             Load more
