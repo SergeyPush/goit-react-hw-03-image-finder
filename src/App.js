@@ -5,6 +5,7 @@ import Loader from 'react-loader-spinner';
 import SearchForm from './components/SearchForm';
 import Gallery from './components/Gallery';
 import Modal from './components/Modal';
+import Error from './components/Error';
 
 import getImages from './services/pixabay';
 
@@ -26,8 +27,6 @@ class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { searchQuery } = this.state;
-    // console.log('component did update');
-
     if (prevState.searchQuery !== searchQuery) {
       this.onLoadMore();
     }
@@ -84,10 +83,12 @@ class App extends Component {
   };
 
   render() {
-    const { photos, isLoading, selectedImage } = this.state;
+    const { photos, isLoading, selectedImage, error, searchQuery } = this.state;
     return (
       <div>
         <SearchForm onSubmit={this.onSubmit} />
+        {error && <Error message={error} />}
+
         {createPortal(
           <Loader
             type="ThreeDots"
@@ -104,9 +105,11 @@ class App extends Component {
             <Modal image={selectedImage} closeModal={this.closeModal} />,
             rootModal,
           )}
-        {/* {selectedImage && <Modal image={selectedImage} />} */}
 
         <Gallery photos={photos} onImageSelect={this.onImageSelect} />
+        {photos.length === 0 && searchQuery.length !== 0 && (
+          <Error message="Images not found" />
+        )}
         {photos.length > 0 && (
           <button type="button" onClick={this.onLoadMore} className="button">
             Load more
