@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
+import T from 'prop-types';
 
 class SearchForm extends Component {
+  static propTypes = {
+    onSubmit: T.func.isRequired,
+  };
+
   state = {
     searchQuery: '',
   };

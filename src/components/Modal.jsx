@@ -1,6 +1,12 @@
 import React, { Component, createRef } from 'react';
+import T from 'prop-types';
 
 class Modal extends Component {
+  static propTypes = {
+    image: T.string.isRequired,
+    closeModal: T.func.isRequired,
+  };
+
   backdropRef = createRef();
 
   componentDidMount() {
@@ -13,7 +19,7 @@ class Modal extends Component {
 
   handleKeyDown = e => {
     if (e.code !== 'Escape') {
-      return null;
+      return;
     }
     this.props.closeModal();
   };
@@ -24,7 +30,7 @@ class Modal extends Component {
 
   handleBackdropClick = e => {
     if (this.backdropRef.current && this.backdropRef.current !== e.target) {
-      return null;
+      return;
     }
     this.props.closeModal();
   };

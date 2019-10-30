@@ -1,4 +1,5 @@
 import React from 'react';
+import T from 'prop-types';
 import PhotoCard from './PhotoCard';
 
 const Gallery = ({ photos, onImageSelect }) => {
@@ -9,6 +10,11 @@ const Gallery = ({ photos, onImageSelect }) => {
       ))}
     </ul>
   );
+};
+
+Gallery.propTypes = {
+  photos: T.arrayOf(T.object.isRequired).isRequired,
+  onImageSelect: T.func.isRequired,
 };
 
 export default Gallery;

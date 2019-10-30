@@ -1,10 +1,9 @@
 import React from 'react';
+import T from 'prop-types';
 
 const PhotoCard = ({ photo, onImageSelect }) => {
   const handleImageButton = image => {
-    // this.props;
     onImageSelect(image);
-    // console.log(id);
   };
 
   const {
@@ -50,6 +49,18 @@ const PhotoCard = ({ photo, onImageSelect }) => {
       </div>
     </div>
   );
+};
+
+PhotoCard.propTypes = {
+  photo: T.shape({
+    webformatURL: T.string.isRequired,
+    largeImageURL: T.string.isRequired,
+    likes: T.number.isRequired,
+    views: T.number.isRequired,
+    comments: T.number.isRequired,
+    downloads: T.number.isRequired,
+  }).isRequired,
+  onImageSelect: T.func.isRequired,
 };
 
 export default PhotoCard;

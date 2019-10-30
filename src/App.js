@@ -23,6 +23,7 @@ class App extends Component {
     searchQuery: '',
     error: null,
     selectedImage: null,
+    loadMore: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -46,6 +47,7 @@ class App extends Component {
     const { searchQuery, page } = this.state;
     this.setState({
       isLoading: true,
+      loadMore: true,
     });
     getImages(searchQuery, page)
       .then(response => {
@@ -62,6 +64,7 @@ class App extends Component {
       .finally(() => {
         this.setState({
           isLoading: false,
+          loadMore: false,
         });
         window.scrollTo({
           top: height,
@@ -83,7 +86,14 @@ class App extends Component {
   };
 
   render() {
-    const { photos, isLoading, selectedImage, error, searchQuery } = this.state;
+    const {
+      photos,
+      isLoading,
+      selectedImage,
+      error,
+      searchQuery,
+      loadMore,
+    } = this.state;
     return (
       <div>
         <SearchForm onSubmit={this.onSubmit} />
@@ -107,11 +117,16 @@ class App extends Component {
           )}
 
         <Gallery photos={photos} onImageSelect={this.onImageSelect} />
-        {photos.length === 0 && searchQuery.length !== 0 && (
+        {photos.length === 0 && searchQuery.length !== 0 && !isLoading && (
           <Error message="Images not found" />
         )}
         {photos.length > 0 && (
-          <button type="button" onClick={this.onLoadMore} className="button">
+          <button
+            type="button"
+            onClick={this.onLoadMore}
+            className="button"
+            disabled={loadMore}
+          >
             Load more
           </button>
         )}
